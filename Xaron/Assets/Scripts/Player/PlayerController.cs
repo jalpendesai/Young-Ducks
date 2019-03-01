@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float speed;     //	Player speed
 
     [Header("Environment Check")]
-	public bool drawDebugRaycasts = true;	//	Should the environment checks be visualized
+    public bool drawDebugRaycasts = true;	//	Should the environment checks be visualized
     public float footOffset = 0.4f; //	X Offset of feet raycast
     public float eyeHeight = 1.5f;  //	Height of wall checks
     public float reachOffset = 0.7f;    //	X Offset for wall grabbing
@@ -20,18 +20,28 @@ public class PlayerController : MonoBehaviour
 
     [Header("Status flags")]
     public bool isOnGround;	//	Is player on Ground? 
+    public bool isHeadBlocked;
+    public bool isHanging;
 
     //	Private Variables
     private Rigidbody2D rbody;              //	Rigidbody Component
     private BoxCollider2D bodyCollider;     //	Collider Component
     private InputManager inputManager;      //	Current Inputs for the player
 
+
+    private float playerHeight;     //  Player Height
+    private int direction = 1;      //  Direction player is facing
+
+    const float smallAmount = 0.5f;     //  Used for Hanging position
     void Start()
     {
         //	Get a reference to the required components
         inputManager = GetComponent<InputManager>();
         rbody = GetComponent<Rigidbody2D>();
         bodyCollider = GetComponent<BoxCollider2D>();
+
+        //  Save the player height from the collider
+        playerHeight = bodyCollider.size.y;
     }
 
     void FixedUpdate()
@@ -45,40 +55,109 @@ public class PlayerController : MonoBehaviour
 
     void PhysicsCheck()
     {
-        //	Assume the player isn't on ground
+        //	Assume the player isn't on ground and the head isn't blocked
         isOnGround = false;
+        isHeadBlocked = false;
 
         //	Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1.3f ), Vector2.down, groundDistance);
+        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -1.3f), Vector2.down, groundDistance);
+
+        //  If either ray hits the ground, the player is on the ground
+        if (leftCheck || rightCheck)
+        {
+            isOnGround = true;
+        }
+
+        //  Cast the ray to check above the player's head
+        RaycastHit2D headCheck = Raycast(new Vector2(0f, playerHeight), Vector2.up, headClearance);
+
+        //  If that ray hits, the player's head is blocked
+        if (headCheck)
+        {
+            isHeadBlocked = true;
+        }
+
+        //  Determine the direction of the wall grab attempt
+        Vector2 grabDir = new Vector2(direction, 0f);
+
+        //  Cast rays to look for a wall grab
+        RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
+        RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
+
+        //  If the player is off the ground
+        //  AND is not Hanging
+        //  AND is Falling
+        //  AND found a ledge
+        //  AND found a Wall
+
+        if (!isOnGround && !isHanging && rbody.velocity.y < 0
+        && ledgeCheck && wallCheck)
+        {
+            //..We have ledge grab, Record the current position
+            Vector3 pos = transform.position;
+
+            //..move the player distance to the wall
+            pos.x += (wallCheck.distance - smallAmount) * direction;
+
+            //..move the player down to grab onto the ledge
+            pos.y -= ledgeCheck.distance;
+
+            //..apply this new position to the player
+            transform.position = pos;
+
+            //..set the rigidbody to static, so that player doen't fall down
+            rbody.bodyType = RigidbodyType2D.Static;
+
+            //..Set player is Hanging to true
+            isHanging = true;
+        }
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
     {
-		//	Call the overloaded Raycast() method using the ground layermask
-		//	and return the results
-		return Raycast(offset,rayDirection, length, groundLayer);
+        //	Call the overloaded Raycast() method using the ground layermask
+        //	and return the results
+        return Raycast(offset, rayDirection, length, groundLayer);
     }
 
-	RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask){
-		//	Record the player's position
-		Vector2 pos = transform.position;
+    RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
+    {
+        //	Record the player's position
+        Vector2 pos = transform.position;
 
-		//	Send out the desired Raycast and record the result
-		RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
+        //	Send out the desired Raycast and record the result
+        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
 
-		//	Show Debug Raycasts in the Scene
-		if(drawDebugRaycasts){
-			//	determine the color based on if the raycast hit
-			Color color = hit ? Color.red : Color.green;
+        //	Show Debug Raycasts in the Scene
+        if (drawDebugRaycasts)
+        {
+            //	determine the color based on if the raycast hit
+            Color color = hit ? Color.red : Color.green;
 
-			//	draw ray in the scene
-			Debug.DrawRay(pos + offset, rayDirection * length, color);
-		}
-		//	Return the results of the raycast
-		return hit;
-	}
+            //	draw ray in the scene
+            Debug.DrawRay(pos + offset, rayDirection * length, color);
+        }
+        //	Return the results of the raycast
+        return hit;
+    }
     void GroundMovement()
     {
-		
+        //  If the player is currently hanging then can't move
+        if(isHanging){
+            return;
+        }
+
+        //  Calculate the desired velocity based on inputs
+        float xVelocity = speed * inputManager.horizontal;
+
+        //  If the sign of the velocity and direction doesn't match,
+        //  then flip the player
+        if(xVelocity * direction < 0f){
+            // FlipCharacterDirection();
+        }
+
+        //  Apply the desired velocity
+        rbody.velocity = new Vector2(xVelocity,rbody.velocity.y);
     }
 }
