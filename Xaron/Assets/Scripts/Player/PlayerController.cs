@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float speed;     //	Player speed
+    public float crouchSpeedDivisor = 3f;   //  Reduce Speed when Crouching
     public float coyoteDuration = 0.05f;    //  How long player can jump after falling
     public float maxFallSpeed = -25f;   //  Max Speed player can fall
 
@@ -45,6 +46,13 @@ public class PlayerController : MonoBehaviour
     private float playerHeight;     //  Player Height
     private int direction = 1;      //  Direction player is facing
 
+    //  Standing Colliders
+    private Vector2 colliderStandSize;  //  Size of the Standing Collider
+    private Vector2 colliderStandOffset;    //  Offset of Standing Collider
+
+    //  Crouching Colliders
+    private Vector2 colliderCrouchSize; //  Size of the Crouching Collider
+    private Vector2 colliderCrouchOffset;   //  Offset of Crouching Collider
     const float smallAmount = 0.5f;     //  Used for Hanging position
     void Start()
     {
@@ -55,6 +63,14 @@ public class PlayerController : MonoBehaviour
 
         //  Save the player height from the collider
         playerHeight = bodyCollider.size.y;
+
+        //  Record the initial collider size and offset
+        colliderStandSize = bodyCollider.size;
+        colliderStandOffset = bodyCollider.offset;
+
+        //  Calculate Crouching Collider size and offset
+        colliderCrouchSize = new Vector2(bodyCollider.size.x, bodyCollider.size.y / 2f);
+        colliderCrouchOffset = new Vector2(bodyCollider.offset.x, bodyCollider.offset.y / 2f);
     }
 
     void FixedUpdate()
@@ -165,6 +181,34 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        //  Crouching Input
+        //  ...If holding the crouch button
+        //  ...AND is not currently crouching
+        //  ...AND is on Ground
+        if (inputManager.crouchHeld
+            && !isCrouching
+            && isOnGround)
+        {
+            Crouch();
+        }
+        //  If not Holding Crouching
+        //  But is currenlty crouching
+        //  Then Stand up
+        else if (!inputManager.crouchHeld
+                && isCrouching)
+        {
+            StandUp();
+        }
+        //  If Crouching
+        //  But not on Ground
+        //  Then Stand Up
+        else if (!isOnGround
+                && isCrouching)
+        {
+            StandUp();
+        }
+
+
         //  Calculate the desired velocity based on inputs
         float xVelocity = speed * inputManager.horizontal;
 
@@ -172,7 +216,14 @@ public class PlayerController : MonoBehaviour
         //  then flip the player
         if (xVelocity * direction < 0f)
         {
-            // FlipCharacterDirection();
+            FlipCharacterDirection();
+        }
+
+        //  If the player is Crouching
+        //  then reduce the velocity
+        if (isCrouching)
+        {
+            xVelocity /= crouchSpeedDivisor;
         }
 
         //  Apply the desired velocity
@@ -266,21 +317,41 @@ public class PlayerController : MonoBehaviour
 
         //  If player is falling too fast,
         //  then reduce the Y velocity to the maxFallSpeed
-        if(rbody.velocity.y < maxFallSpeed){
+        if (rbody.velocity.y < maxFallSpeed)
+        {
             rbody.velocity = new Vector2(rbody.velocity.x, maxFallSpeed);
         }
     }
 
     void StandUp()
     {
+        //  If the player's head is blocked
+        //  then can't stand
+        if (isHeadBlocked)
+        {
+            return;
+        }
 
+        //  Player isn't crouching
+        isCrouching = false;
+
+        //  Apply the Standing collider size and offset
+        bodyCollider.size = colliderStandSize;
+        bodyCollider.offset = colliderStandOffset;
     }
 
-    void Crouch(){
-        
+    void Crouch()
+    {
+        //  Set Player is Crouching
+        isCrouching = true;
+
+        //  Apply the Crouching Collider size and offset
+        bodyCollider.size = colliderCrouchSize;
+        bodyCollider.offset = colliderCrouchOffset;
     }
-    
-    void FlipCharacterDirection(){
-        
+
+    void FlipCharacterDirection()
+    {
+
     }
 }
