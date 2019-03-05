@@ -5,8 +5,11 @@
 public class InputManager : MonoBehaviour
 {
 
-    public float horizontal;
-
+    [HideInInspector] public float horizontal;
+    [HideInInspector] public bool crouchPressed;
+    [HideInInspector] public bool crouchHeld;
+    [HideInInspector] public bool jumpPressed;
+    [HideInInspector] public bool jumpHeld;
     private bool readyToClear;
 
     void Update()
@@ -14,7 +17,13 @@ public class InputManager : MonoBehaviour
         //	Clear out existing input values
         ClearInput();
 
-        //	Process Keyboard, mouse, gamepad inputs
+        //  If Game Over then exit
+        // if (GameManager.IsGameOver())
+        // {
+        //     return;
+        // }
+
+        //	Process Keyboard, mouse
         ProcessInputs();
 
         //	Clamp horizontal input to between -1 and 1
@@ -23,8 +32,8 @@ public class InputManager : MonoBehaviour
 
     void FixedUpdate()
     {
-		//	Set a flag that lets inputs to be cleared out during the
-		//	next Update(). This ensures that all code gets to use the current inputs.
+        //	Set a flag that lets inputs to be cleared out during the
+        //	next Update(). This ensures that all code gets to use the current inputs.
         readyToClear = true;
     }
 
@@ -38,10 +47,24 @@ public class InputManager : MonoBehaviour
 
         //	Reset all input values
         horizontal = 0.0f;
+        jumpPressed = false;
+        jumpHeld = false;
+        crouchPressed = false;
+        crouchHeld = false;
+        readyToClear = false;
     }
 
     void ProcessInputs()
     {
+        //  Horizontal Input Axis
         horizontal += Input.GetAxis("Horizontal");
+
+        //  Jump
+        jumpPressed = jumpPressed || Input.GetButtonDown("Jump");
+        jumpHeld = jumpHeld || Input.GetButton("Jump");
+
+        //  Crouch
+        crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
+        crouchHeld = crouchHeld || Input.GetButton("Crouch");
     }
 }

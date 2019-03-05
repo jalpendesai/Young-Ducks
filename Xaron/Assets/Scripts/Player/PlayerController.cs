@@ -7,6 +7,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float speed;     //	Player speed
+    public float coyoteDuration = 0.05f;    //  How long player can jump after falling
+    public float maxFallSpeed = -25f;   //  Max Speed player can fall
+
+    [Header("Jumping")]
+    public float jumpForce = 6.3f; //  Initial force of Jump
+    private float jumpTime; //  Variable to hold jump duration
+    private float coyoteTime;   //  Variable to hold coyote duration
+    public float crouchJumpBoost = 2.5f;   // Give extra boost for jumping if player is crouching
+    public float hangingJumpForce = 15f;  //  Force of wall hanging jump
+    public float jumpHoldForce = 2f; //  Incremental force when jump is held
+    public float jumpHoldDuration = 0.1f;  //  How long the jump key can be held
 
     [Header("Environment Check")]
     public bool drawDebugRaycasts = true;	//	Should the environment checks be visualized
@@ -20,8 +31,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Status flags")]
     public bool isOnGround;	//	Is player on Ground? 
-    public bool isHeadBlocked;
-    public bool isHanging;
+    public bool isJumping;  //  Is player Jumping?
+    public bool isCrouching;    //  Is player Crouching?
+    public bool isHeadBlocked;  //  Is player's Head Blocked?
+    public bool isHanging;  //  Is player Hanging on wall?
 
     //	Private Variables
     private Rigidbody2D rbody;              //	Rigidbody Component
@@ -51,6 +64,9 @@ public class PlayerController : MonoBehaviour
 
         //	Process ground
         GroundMovement();
+
+        // Process Air Movements (Jump)
+        MidAirMovement();
     }
 
     void PhysicsCheck()
@@ -60,7 +76,7 @@ public class PlayerController : MonoBehaviour
         isHeadBlocked = false;
 
         //	Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1.3f ), Vector2.down, groundDistance);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1.3f), Vector2.down, groundDistance);
         RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -1.3f), Vector2.down, groundDistance);
 
         //  If either ray hits the ground, the player is on the ground
@@ -144,7 +160,8 @@ public class PlayerController : MonoBehaviour
     void GroundMovement()
     {
         //  If the player is currently hanging then can't move
-        if(isHanging){
+        if (isHanging)
+        {
             return;
         }
 
@@ -153,11 +170,117 @@ public class PlayerController : MonoBehaviour
 
         //  If the sign of the velocity and direction doesn't match,
         //  then flip the player
-        if(xVelocity * direction < 0f){
+        if (xVelocity * direction < 0f)
+        {
             // FlipCharacterDirection();
         }
 
         //  Apply the desired velocity
-        rbody.velocity = new Vector2(xVelocity,rbody.velocity.y);
+        rbody.velocity = new Vector2(xVelocity, rbody.velocity.y);
+
+        //  If player is on Ground
+        //  then extend the coyote time duration
+        if (isOnGround)
+        {
+            coyoteTime = Time.time + coyoteDuration;
+        }
+    }
+
+    void MidAirMovement()
+    {
+        //  If player is currently hanging,
+        //  ...then cannot crouch
+        //  ...but can jump
+
+        if (isHanging)
+        {
+            //  If Crouch is pressed, Slide down
+            if (inputManager.crouchPressed)
+            {
+                //  let go the hanging and slide down the wall
+                isHanging = false;
+
+                //  Set rigidbody to dynamic and exit
+                rbody.bodyType = RigidbodyType2D.Dynamic;
+                return;
+            }
+
+            //  If Jump is pressed
+            if (inputManager.jumpPressed)
+            {
+                //  let go the hanging and slide down the wall
+                isHanging = false;
+
+                // Set rigidbody to dynamic, apply jump force and exit
+                rbody.bodyType = RigidbodyType2D.Dynamic;
+                rbody.AddForce(new Vector2(0f, hangingJumpForce), ForceMode2D.Impulse);
+                return;
+            }
+        }
+
+        //  If the JUMP key is pressed
+        //  ...AND player isn't already jumping
+        //  ...AND (either the player is on the Ground
+        //  ...OR within the coyote time window) 
+
+        if (inputManager.jumpPressed
+            && !isJumping
+            && (isOnGround || coyoteTime > Time.time))
+        {
+            //  if Crouching AND Head not blocked
+            //  then Stand up and apply crouching jump boost
+            if (isCrouching && !isHeadBlocked)
+            {
+                StandUp();
+                rbody.AddForce(new Vector2(0f, crouchJumpBoost), ForceMode2D.Impulse);
+            }
+
+            //  Player is not on Ground And is jumping
+            isOnGround = false;
+            isJumping = true;
+
+            //  Record the time the player will stop being able to boost their jump
+            jumpTime = Time.time + jumpHoldDuration;
+
+            //  Add the jump force
+            rbody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+        }
+
+        //  Check if player is currently within the Jump time window,
+        else if (isJumping)
+        {
+            //  ..and jump button is held
+            //  ..then can apply JumpHoldforce
+            if (inputManager.jumpHeld)
+            {
+                rbody.AddForce(new Vector2(0f, jumpHoldForce), ForceMode2D.Impulse);
+            }
+
+            //  ..if Jump time is past
+            //  ..then set isJumping to false
+            if (jumpTime <= Time.time)
+            {
+                isJumping = false;
+            }
+        }
+
+        //  If player is falling too fast,
+        //  then reduce the Y velocity to the maxFallSpeed
+        if(rbody.velocity.y < maxFallSpeed){
+            rbody.velocity = new Vector2(rbody.velocity.x, maxFallSpeed);
+        }
+    }
+
+    void StandUp()
+    {
+
+    }
+
+    void Crouch(){
+        
+    }
+    
+    void FlipCharacterDirection(){
+        
     }
 }
