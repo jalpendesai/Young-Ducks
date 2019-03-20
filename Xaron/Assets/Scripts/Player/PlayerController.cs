@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
 
     [Header("Movement")]
-    public float speed;     //	Player speed
+    public float speed = 8f;     //	Player speed
     public float crouchSpeedDivisor = 3f;   //  Reduce Speed when Crouching
     public float coyoteDuration = 0.05f;    //  How long player can jump after falling
     public float maxFallSpeed = -25f;   //  Max Speed player can fall
@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
 
     private float playerHeight;     //  Player Height
+    private float originalXScale;   //  Original scale on X axis
     private int direction = 1;      //  Direction player is facing
 
     //  Standing Colliders
@@ -60,6 +61,9 @@ public class PlayerController : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         rbody = GetComponent<Rigidbody2D>();
         bodyCollider = GetComponent<BoxCollider2D>();
+
+        //  Record Original x scale
+        originalXScale = transform.localScale.x;
 
         //  Save the player height from the collider
         playerHeight = bodyCollider.size.y;
@@ -92,8 +96,8 @@ public class PlayerController : MonoBehaviour
         isHeadBlocked = false;
 
         //	Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1.3f), Vector2.down, groundDistance);
-        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -1.3f), Vector2.down, groundDistance);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
+        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, 0f), Vector2.down, groundDistance);
 
         //  If either ray hits the ground, the player is on the ground
         if (leftCheck || rightCheck)
@@ -102,7 +106,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //  Cast the ray to check above the player's head
-        RaycastHit2D headCheck = Raycast(new Vector2(0f, playerHeight), Vector2.up, headClearance);
+        RaycastHit2D headCheck = Raycast(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance);
 
         //  If that ray hits, the player's head is blocked
         if (headCheck)
@@ -116,6 +120,7 @@ public class PlayerController : MonoBehaviour
         //  Cast rays to look for a wall grab
         RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
         RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
+        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction,playerHeight),grabDir,grabDistance);
 
         //  If the player is off the ground
         //  AND is not Hanging
@@ -123,8 +128,8 @@ public class PlayerController : MonoBehaviour
         //  AND found a ledge
         //  AND found a Wall
 
-        if (!isOnGround && !isHanging && rbody.velocity.y < 0
-        && ledgeCheck && wallCheck)
+        if (!isOnGround && !isHanging && rbody.velocity.y < 0f
+        && ledgeCheck && wallCheck && !blockedCheck)
         {
             //..We have ledge grab, Record the current position
             Vector3 pos = transform.position;
@@ -352,6 +357,16 @@ public class PlayerController : MonoBehaviour
 
     void FlipCharacterDirection()
     {
+        //  Flip the direction
+        direction *= -1;
 
+        //  Save the current Scale
+        Vector3 scale = transform.localScale;
+
+        //  Set the X scale to original times the direction
+        scale.x = originalXScale * direction;
+
+        //  Apply new Scale
+        transform.localScale = scale;
     }
 }

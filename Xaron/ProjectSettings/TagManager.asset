@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - Platform
-  - Foreground
-  - Background
-  - 
+  - PostProcessing
+  - Player
+  - Platforms
+  - Traps
   - 
   - 
   - 
