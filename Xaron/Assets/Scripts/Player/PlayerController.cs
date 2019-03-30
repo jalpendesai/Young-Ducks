@@ -55,6 +55,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 colliderCrouchSize; //  Size of the Crouching Collider
     private Vector2 colliderCrouchOffset;   //  Offset of Crouching Collider
     const float smallAmount = 0.5f;     //  Used for Hanging position
+
+    private GameManager _gameManager;
     void Start()
     {
         //	Get a reference to the required components
@@ -75,6 +77,10 @@ public class PlayerController : MonoBehaviour
         //  Calculate Crouching Collider size and offset
         colliderCrouchSize = new Vector2(bodyCollider.size.x, bodyCollider.size.y / 2f);
         colliderCrouchOffset = new Vector2(bodyCollider.offset.x, bodyCollider.offset.y / 2f);
+    
+        //  Setting player position to last checkpoint
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        transform.position = _gameManager.lastCheckPointPos;
     }
 
     void FixedUpdate()
