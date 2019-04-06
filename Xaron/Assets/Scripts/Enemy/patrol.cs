@@ -10,7 +10,7 @@ public class patrol : MonoBehaviour
     private bool movingRight = true;
 
     private void Update() {
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        transform.Translate(Vector2.left * speed * Time.deltaTime);
 
         RaycastHit2D groundInfo = Physics2D.Raycast(groundDetaction.position,Vector2.down,2f);
 
