@@ -12,10 +12,13 @@ public class bullet : MonoBehaviour
     private Transform player;
     private Vector2 target;
 
+    private PlayerStats playerStats;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         target = new Vector2(player.position.x, player.position.y);
+        playerStats = player.GetComponent<PlayerStats>();
     }
 
     private void Update() {
@@ -35,6 +38,7 @@ public class bullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Hit");
+            playerStats.TakeDamage(5);
             DestroyBullet();
         }
     }

@@ -127,7 +127,6 @@ MonoBehaviour:
   ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
     type: 3}
   shotPoint: {fileID: 2009142559}
-  dir: 1
   startTimeBtwShots: 0.2
 --- !u!1 &8140061089084668615
 GameObject:
