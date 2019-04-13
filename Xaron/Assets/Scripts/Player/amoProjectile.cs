@@ -35,4 +35,17 @@ public class amoProjectile : MonoBehaviour
         // Instantiate(destroyEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Enemy")){
+            Debug.Log("Enemy Hit");
+
+        }
+    }
+    // private void OnCollisionEnter2D(Collision2D other) {
+    //     if(other.CompareTag("Enemy")){
+    //         Debug.Log("Enemy Hit");
+
+    //     }
+    // }
 }
