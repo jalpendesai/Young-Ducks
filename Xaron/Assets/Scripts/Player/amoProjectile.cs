@@ -12,11 +12,6 @@ public class amoProjectile : MonoBehaviour
 
     // public GameObject destroyEffect;
 
-    private void Start()
-    {
-        Invoke("DestroyProjectile", lifeTime);
-    }
-
     private void Update()
     {
         // RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
@@ -27,25 +22,15 @@ public class amoProjectile : MonoBehaviour
         //     DestroyProjectile();
         // }
 
-
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
-    void DestroyProjectile() {
-        // Instantiate(destroyEffect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.CompareTag("Enemy")){
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
             Debug.Log("Enemy Hit");
-
+            Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
-    // private void OnCollisionEnter2D(Collision2D other) {
-    //     if(other.CompareTag("Enemy")){
-    //         Debug.Log("Enemy Hit");
-
-    //     }
-    // }
 }
