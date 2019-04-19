@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3192690490712396919}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.22, y: 0.56, z: 0}
+  m_LocalPosition: {x: 0.264, y: 0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8140061089769860939}
@@ -87,16 +87,63 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3192690490712396919}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e570b3cdc13b3f84486c2c7e064e207a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
+  velocity: {x: 10, y: 0}
   ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
     type: 3}
   offset: {x: 0.6, y: 0.1}
   startTimeBtwShots: 0.2
+--- !u!1 &6324672736654950563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2613404184498729581}
+  - component: {fileID: 2174739198651223353}
+  m_Layer: 9
+  m_Name: PowerUpMagnet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2613404184498729581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6324672736654950563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8140061089769860939}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &2174739198651223353
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6324672736654950563}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 6
 --- !u!1 &8140061089084668615
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +237,8 @@ GameObject:
   - component: {fileID: 8140061089769860941}
   - component: {fileID: 8140061089769860938}
   - component: {fileID: 8140061089769860942}
+  - component: {fileID: 541250373}
+  - component: {fileID: 541250374}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -210,6 +259,7 @@ Transform:
   m_Children:
   - {fileID: 8140061089084668614}
   - {fileID: 6974323337805724410}
+  - {fileID: 2613404184498729581}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -327,3 +377,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadZone: -12
   isEnemy: 0
+--- !u!114 &541250373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140061089769860936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54eac2d4c7ab11f4fb9e70707121fd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  damage:
+    baseValue: 0
+  armor:
+    baseValue: 0
+--- !u!114 &541250374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140061089769860936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e570b3cdc13b3f84486c2c7e064e207a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 10, y: 0}
+  ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
+    type: 3}
+  offset: {x: 0.1, y: 0.6}
+  startTimeBtwShots: 0.2
