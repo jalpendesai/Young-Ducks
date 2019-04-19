@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float speed = 8f;     //	Player speed
+    public float speedMultiplier = 1f;
     public float crouchSpeedDivisor = 3f;   //  Reduce Speed when Crouching
     public float coyoteDuration = 0.05f;    //  How long player can jump after falling
     public float maxFallSpeed = -25f;   //  Max Speed player can fall
@@ -77,10 +78,11 @@ public class PlayerController : MonoBehaviour
         //  Calculate Crouching Collider size and offset
         colliderCrouchSize = new Vector2(bodyCollider.size.x, bodyCollider.size.y / 2f);
         colliderCrouchOffset = new Vector2(bodyCollider.offset.x, bodyCollider.offset.y / 2f);
-    
+
         //  Setting player position to last checkpoint
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         transform.position = _gameManager.lastCheckPointPos;
+
     }
 
     void FixedUpdate()
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
         //  Cast rays to look for a wall grab
         RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
         RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
-        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction,playerHeight),grabDir,grabDistance);
+        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight), grabDir, grabDistance);
 
         //  If the player is off the ground
         //  AND is not Hanging
@@ -374,5 +376,36 @@ public class PlayerController : MonoBehaviour
 
         //  Apply new Scale
         transform.localScale = scale;
+    }
+
+    //  Apply Modifiers
+    public void ApplyModifier(ModifierList modifier, float modifierValue, float timePeriod)
+    {
+
+
+        StartCoroutine(Modifier(modifier, modifierValue, timePeriod));
+    }
+
+    IEnumerator Modifier(ModifierList modifier, float modifierValue, float timePeriod)
+    {
+        float lastValue = 0;        //  Temporary Save LastValue
+        switch (modifier)
+        {
+            case ModifierList.speed:
+                lastValue = speed;
+                speed = speed * modifierValue;      //  Applied Modifier
+                break;
+        }
+
+        yield return new WaitForSeconds(timePeriod);
+
+        //  Switch back to its original value
+        switch (modifier)
+        {
+            case ModifierList.speed:
+                speed = lastValue;
+                break;
+        }
+
     }
 }

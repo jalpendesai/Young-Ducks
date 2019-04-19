@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6974323337805724410}
   - component: {fileID: 1409497647835916558}
-  - component: {fileID: 3192690490712396920}
   m_Layer: 0
   m_Name: playerGun
   m_TagString: Untagged
@@ -80,23 +79,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3192690490712396920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3192690490712396919}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e570b3cdc13b3f84486c2c7e064e207a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 10, y: 0}
-  ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
-    type: 3}
-  offset: {x: 0.6, y: 0.1}
-  startTimeBtwShots: 0.2
 --- !u!1 &6324672736654950563
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,6 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  speedMultiplier: 1
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25
