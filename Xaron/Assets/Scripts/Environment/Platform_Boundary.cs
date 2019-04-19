@@ -12,9 +12,13 @@ public class Platform_Boundary : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(this.transform.position.y < deadZone){
-            if(!isEnemy){
+        if (this.transform.position.y < deadZone)
+        {
+            if (!isEnemy)
+            {
+                AudioManager.PlayPlayerDeathAudio();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
             else
             {

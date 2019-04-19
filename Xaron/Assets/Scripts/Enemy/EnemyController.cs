@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
 
     //  if player is not in sight   ->  Patrol
 
-    [SerializeField]private float health = 100.0f;
+    [SerializeField] private float health = 100.0f;
     public float patrolSpeed = 2.0f;
     public float eyeHeight = 1.0f;
     public float fovAngle = 60f;
@@ -160,30 +160,35 @@ public class EnemyController : MonoBehaviour
         canShoot = false;
     }
 
-    public void TakeDamage(int damage){
+    public void TakeDamage(int damage)
+    {
         health -= damage;
         hud.score += hitScore;
-        if(health < 0){
+        if (health < 0)
+        {
             Die();
         }
     }
 
-    private void Die(){
+    private void Die()
+    {
+        AudioManager.PlayEnemyDeathAudio();
+
         // Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
-        
+
         //  Give Player a Score
         // playerStats.score += hitScore + dieScore;
 
         //  Spawn PowerUps
         //Debug.Log("Enemy Killed");
-            Vector2 position = transform.position;
+        Vector2 position = transform.position;
 
-            // Instantiate Random PowerUp
-            _randomPowerUp = Random.Range(0, _gameManager.powerUps.Length);
-            var randomPowerUp = _gameManager.powerUps[_randomPowerUp];
-            var powerup = Instantiate(randomPowerUp, position, Quaternion.identity);
-            Destroy(powerup, 5);
+        // Instantiate Random PowerUp
+        _randomPowerUp = Random.Range(0, _gameManager.powerUps.Length);
+        var randomPowerUp = _gameManager.powerUps[_randomPowerUp];
+        var powerup = Instantiate(randomPowerUp, position, Quaternion.identity);
+        Destroy(powerup, 5);
     }
 
 }

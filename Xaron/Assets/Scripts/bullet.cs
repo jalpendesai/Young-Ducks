@@ -39,6 +39,7 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerStats.TakeDamage(damage);
+            AudioManager.PlayPlayerHitAudio();
             DestroyBullet();
         }
     }

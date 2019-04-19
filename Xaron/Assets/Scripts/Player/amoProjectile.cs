@@ -31,6 +31,7 @@ public class amoProjectile : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
+            AudioManager.PlayEnemyHitAudio();            
         }
 
 

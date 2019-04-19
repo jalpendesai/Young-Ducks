@@ -10,6 +10,7 @@ public class TrapCollider : MonoBehaviour
         if (other.collider.CompareTag("Player"))
         {
             Debug.Log("Dead Meat");
+            AudioManager.PlayPlayerDeathAudio();
             Destroy(other.gameObject);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 

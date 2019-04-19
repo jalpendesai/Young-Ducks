@@ -64,7 +64,7 @@ public class PlayerAnimations : MonoBehaviour
 	public void StepAudio()
 	{
 		//Tell the Audio Manager to play a footstep sound
-		// AudioManager.PlayFootstepAudio();
+		AudioManager.PlayWalkingAudio();
 	}
 
 	//This method is called from events in the animation itself. This keeps the footstep
@@ -72,6 +72,6 @@ public class PlayerAnimations : MonoBehaviour
 	public void CrouchStepAudio()
 	{
 		//Tell the Audio Manager to play a crouching footstep sound
-		// AudioManager.PlayCrouchFootstepAudio();
+		AudioManager.PlayCrouchingAudio();
 	}
 }

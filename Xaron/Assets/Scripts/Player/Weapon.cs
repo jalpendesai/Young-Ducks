@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour
     private int ammoCapacity = 6;
     private int ammoCount = 0;
     private bool canFire = true;
-    private float reloadingTime = 5.0f;
+    private float reloadingTime = 1.0f;
     private float fireShots = 2;
 
     private void Update()
@@ -56,6 +56,8 @@ public class Weapon : MonoBehaviour
                     GameObject bullet2 = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset, Quaternion.identity);
                     bullet2.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity.x * transform.localScale.x, velocity.y - 0.5f);
 
+                    AudioManager.PlayPlayerFiringAudio();
+
                     Destroy(bullet, 1.0f);
                     Destroy(bullet2, 1.0f);
                 }
@@ -92,6 +94,8 @@ public class Weapon : MonoBehaviour
     {
         ammoCount = 0;
         canFire = false;
+
+        AudioManager.PlayPlayerFireReloadingAudio();
         yield return new WaitForSeconds(reloadingTime);     // wait for reloading time
         ammoCount = 0;      //  reset counter
         canFire = true;

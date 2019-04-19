@@ -49,5 +49,6 @@ public class PlayerStats : MonoBehaviour
     public virtual void Die()
     {
         Debug.Log("Died");
+        AudioManager.PlayPlayerDeathAudio();
     }
 }

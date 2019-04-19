@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public float reachOffset = 0.7f;    //	X Offset for wall grabbing
     public float headClearance = 0.5f;  //	Space needed above the player's head
     public float groundDistance = 0.2f; //	Distance player is considered to be on the ground
-    public float grabDistance = 0.4f;   // Wall grabbing distance
+    public float grabDistance = 0.2f;   // Wall grabbing distance
     public LayerMask groundLayer;   //	Layer of the ground
 
     [Header("Status flags")]
@@ -55,9 +55,18 @@ public class PlayerController : MonoBehaviour
     //  Crouching Colliders
     private Vector2 colliderCrouchSize; //  Size of the Crouching Collider
     private Vector2 colliderCrouchOffset;   //  Offset of Crouching Collider
-    const float smallAmount = 0.5f;     //  Used for Hanging position
+    const float smallAmount = 0.05f;     //  Used for Hanging position
 
     private GameManager _gameManager;
+    // private PlayerController current;
+    // private void Awake() {
+    //     if(current != null && current!= this){
+    //         Destroy(gameObject);
+    //         return;
+    //     }
+    //     current = this;
+    //     DontDestroyOnLoad(gameObject);
+    // }
     void Start()
     {
         //	Get a reference to the required components
@@ -82,6 +91,7 @@ public class PlayerController : MonoBehaviour
         //  Setting player position to last checkpoint
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         transform.position = _gameManager.lastCheckPointPos;
+
 
     }
 
@@ -126,9 +136,9 @@ public class PlayerController : MonoBehaviour
         Vector2 grabDir = new Vector2(direction, 0f);
 
         //  Cast rays to look for a wall grab
+        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight), grabDir, grabDistance);        
         RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
         RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
-        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight), grabDir, grabDistance);
 
         //  If the player is off the ground
         //  AND is not Hanging
@@ -308,6 +318,7 @@ public class PlayerController : MonoBehaviour
 
             //  Add the jump force
             rbody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            AudioManager.PlayJumpingAudio();
         }
 
         //  Check if player is currently within the Jump time window,
