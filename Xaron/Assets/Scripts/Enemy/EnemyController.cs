@@ -27,12 +27,16 @@ public class EnemyController : MonoBehaviour
     private bool canShoot = false;
     private bool isPatrolling = true;
 
-
+    private GameManager _gameManager;
+    private int _randomPowerUp;
     private void Start()
     {
         // groundDetection = GameObject.Find("GroundDetection").transform.GetChild(0);
         groundDetection = gameObject.transform.GetChild(0);
         // fovAngle = fovAngle * Mathf.Deg2Rad;
+
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
     }
 
     private void FixedUpdate()
@@ -163,6 +167,16 @@ public class EnemyController : MonoBehaviour
     private void Die(){
         // Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
+
+        //  Spawn PowerUps
+        //Debug.Log("Enemy Killed");
+            Vector2 position = transform.position;
+
+            // Instantiate Random PowerUp
+            _randomPowerUp = Random.Range(0, _gameManager.powerUps.Length);
+            var randomPowerUp = _gameManager.powerUps[_randomPowerUp];
+            var powerup = Instantiate(randomPowerUp, position, Quaternion.identity);
+            Destroy(powerup, 5);
     }
 
 }
