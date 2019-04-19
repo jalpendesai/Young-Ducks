@@ -5,6 +5,7 @@ using UnityEngine;
 public class bullet : MonoBehaviour
 {
     public float moveSpeed = 7f;
+    public int damage = 5;
 
     private Rigidbody2D rbody;
 
@@ -37,8 +38,7 @@ public class bullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Hit");
-            playerStats.TakeDamage(5);
+            playerStats.TakeDamage(damage);
             DestroyBullet();
         }
     }

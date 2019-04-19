@@ -64,7 +64,10 @@ public class InputManager : MonoBehaviour
         jumpHeld = jumpHeld || Input.GetButton("Jump");
 
         //  Crouch
-        crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
-        crouchHeld = crouchHeld || Input.GetButton("Crouch");
+        // crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
+        // crouchHeld = crouchHeld || Input.GetButton("Crouch");
+        if(Input.GetAxis("Crouch") > 0){
+            crouchHeld = crouchPressed = true;
+        }
     }
 }

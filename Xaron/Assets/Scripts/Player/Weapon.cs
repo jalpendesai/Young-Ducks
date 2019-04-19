@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
     public Vector2 velocity;
     public GameObject ammoPrefab;
     // public GameObject shotEffect;
-    public Vector2 offset = new Vector2(0.6f, 0.1f);
+    public Vector2 offset;
     // public Animator camAnim;
 
     private float timeBtwShots;
@@ -25,15 +25,16 @@ public class Weapon : MonoBehaviour
         // float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
         // transform.rotation = Quaternion.Euler(0f, 0f, rotZ);
 
+        // offset = new Vector2(0.6f, 0.6f * transform.localScale.x);
         if (timeBtwShots <= 0)
         {
             if (Input.GetButtonDown("Fire"))
             {
                 // Instantiate(shotEffect, shotPoint.position, Quaternion.identity);
                 // camAnim.SetTrigger("shake");
-                GameObject bullet = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset * transform.localScale.x, Quaternion.identity);
+                GameObject bullet = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset, Quaternion.identity);
                 bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity.x * transform.localScale.x, velocity.y);
-                Destroy(bullet,1.0f);
+                Destroy(bullet, 1.0f);
                 timeBtwShots = startTimeBtwShots;
             }
         }

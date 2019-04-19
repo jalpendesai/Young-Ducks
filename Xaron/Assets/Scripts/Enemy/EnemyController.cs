@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
 
     //  if player is not in sight   ->  Patrol
 
+    public float health = 100.0f;
     public float patrolSpeed = 2.0f;
     public float eyeHeight = 1.0f;
     public float fovAngle = 60f;
@@ -150,6 +151,18 @@ public class EnemyController : MonoBehaviour
     {
         isPatrolling = true;
         canShoot = false;
+    }
+
+    public void TakeDamage(int damage){
+        health -= damage;
+        if(health < 0){
+            Die();
+        }
+    }
+
+    private void Die(){
+        // Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
 }

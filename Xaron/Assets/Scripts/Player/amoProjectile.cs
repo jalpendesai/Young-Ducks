@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class amoProjectile : MonoBehaviour
 {
-    public float speed = 10;
+    public float speed = 10f;
     public float lifeTime = 1.5f;
+    public int damage = 30;
     // public float distance;
-    // public int damage;
     // public LayerMask whatIsSolid;
 
     // public GameObject destroyEffect;
@@ -26,11 +26,13 @@ public class amoProjectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        Destroy(gameObject);
+        EnemyController enemy = other.gameObject.GetComponent<EnemyController>();
+        if (enemy != null)
         {
-            Debug.Log("Enemy Hit");
-            Destroy(other.gameObject);
-            Destroy(gameObject);
+            enemy.TakeDamage(damage);
         }
+
+
     }
 }
