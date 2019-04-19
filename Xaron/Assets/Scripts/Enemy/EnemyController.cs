@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
 
     //  if player is not in sight   ->  Patrol
 
-    public float health = 100.0f;
+    [SerializeField]private float health = 100.0f;
     public float patrolSpeed = 2.0f;
     public float eyeHeight = 1.0f;
     public float fovAngle = 60f;
@@ -19,6 +19,8 @@ public class EnemyController : MonoBehaviour
     public GameObject bullet;
     public float timeBetweenShots = 0.3f;
     public float startTimeBetweenShots;
+    public int hitScore = 5;        //  Player will get reward for shotting at enemy
+    public int dieScore = 10;
 
     //  Private Variables
     private int dir = -1;
@@ -29,6 +31,7 @@ public class EnemyController : MonoBehaviour
 
     private GameManager _gameManager;
     private int _randomPowerUp;
+    private HUDScript hud;
     private void Start()
     {
         // groundDetection = GameObject.Find("GroundDetection").transform.GetChild(0);
@@ -36,7 +39,7 @@ public class EnemyController : MonoBehaviour
         // fovAngle = fovAngle * Mathf.Deg2Rad;
 
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
+        hud = GameObject.FindGameObjectWithTag("Hud").GetComponent<HUDScript>();
     }
 
     private void FixedUpdate()
@@ -159,6 +162,7 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(int damage){
         health -= damage;
+        hud.score += hitScore;
         if(health < 0){
             Die();
         }
@@ -167,6 +171,9 @@ public class EnemyController : MonoBehaviour
     private void Die(){
         // Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
+        
+        //  Give Player a Score
+        // playerStats.score += hitScore + dieScore;
 
         //  Spawn PowerUps
         //Debug.Log("Enemy Killed");

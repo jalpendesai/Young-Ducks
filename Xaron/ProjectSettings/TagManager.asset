@@ -9,6 +9,8 @@ TagManager:
   - platform
   - Enemy
   - Trap
+  - PowerUp
+  - Hud
   layers:
   - Default
   - TransparentFX
