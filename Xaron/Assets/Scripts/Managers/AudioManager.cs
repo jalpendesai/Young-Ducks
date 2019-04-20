@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     [Header("Bg Music")]
     public AudioClip bgMusic;
     public AudioClip sceneReload;
+    public AudioClip bossMusic;
 
     [Header("Player")]
     public AudioClip[] walking;
@@ -180,5 +181,12 @@ public class AudioManager : MonoBehaviour
 
         current.voiceSource.clip = current.deathEnemy;
         current.voiceSource.Play();
+    }
+
+    public static void PlayBossMusic(){
+        // if(current == null)
+        current.musicSource.clip = current.bossMusic;
+        current.musicSource.loop = true;
+        current.musicSource.Play();
     }
 }

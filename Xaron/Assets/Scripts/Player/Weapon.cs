@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     public float fireRate;
 
     public GameObject shotEffect;
-    private int ammoCapacity = 6;
+    private float ammoCapacity = 6;
     private int ammoCount = 0;
     private bool canFire = true;
     private float reloadingTime = 1.0f;
@@ -129,6 +129,11 @@ public class Weapon : MonoBehaviour
                 lastValue = fireShots;
                 fireShots = modifierValue;
                 break;
+
+            case ModifierList.AmmoCapacity:
+                lastValue = ammoCapacity;
+                ammoCapacity = modifierValue;
+                break;
         }
 
         yield return new WaitForSeconds(timePeriod);
@@ -142,6 +147,10 @@ public class Weapon : MonoBehaviour
 
             case ModifierList.fireShots:
                 fireShots = lastValue;
+                break;
+
+            case ModifierList.AmmoCapacity:
+                ammoCapacity = lastValue;
                 break;
         }
 

@@ -7,6 +7,7 @@ public enum ModifierList
     speed,
     fireShots,
     fireRegTime,
+    AmmoCapacity,
     damage
 };
 public class PowerUpMagnet : MonoBehaviour
@@ -15,6 +16,7 @@ public class PowerUpMagnet : MonoBehaviour
     public float speedMultiplier = 1.0f;
     public float fireShots = 1;
     public float regFireMultiplier = 1.0f;
+    public float ammoCapacity = 1.0f;
     public float damageMultiplier = 1.0f;
     public float timePeriod = 1.0f;
 
@@ -76,6 +78,10 @@ public class PowerUpMagnet : MonoBehaviour
 
                 case ModifierList.fireRegTime:
                     playerWeapon.ApplyModifier(modifier, regFireMultiplier, timePeriod);
+                    break;
+
+                case ModifierList.AmmoCapacity:
+                    playerWeapon.ApplyModifier(modifier, ammoCapacity, timePeriod);                
                     break;
 
                 case ModifierList.damage:
