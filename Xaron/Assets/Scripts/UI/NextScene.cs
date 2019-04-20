@@ -14,9 +14,9 @@ public class NextScene : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            _gameManager.lastCheckPointPos = nextScenePos;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            // _gameManager.lastCheckPointPos = nextScenePos;
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

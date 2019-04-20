@@ -45,6 +45,9 @@ public class Weapon : MonoBehaviour
                 {
                     GameObject bullet = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset, Quaternion.identity);
                     bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity.x * transform.localScale.x, velocity.y);
+                    
+                    AudioManager.PlayPlayerFiringAudio();
+
                     Destroy(bullet, 1.0f);
                 }
 
@@ -72,6 +75,7 @@ public class Weapon : MonoBehaviour
 
                     GameObject bullet3 = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset, Quaternion.identity);
                     bullet3.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity.x * transform.localScale.x, velocity.y - 0.5f);
+                    AudioManager.PlayPlayerFiringAudio();
 
                     Destroy(bullet, 1.0f);
                     Destroy(bullet2, 1.0f);
