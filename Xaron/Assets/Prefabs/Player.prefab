@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479114984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.062, y: 0.93, z: -1}
+  m_LocalPosition: {x: 0.062, y: 0.93, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8140061089769860939}
@@ -94,7 +94,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3192690490712396919}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.264, y: 0.56, z: 0}
+  m_LocalPosition: {x: 0.15, y: 0.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8140061089769860939}
@@ -476,8 +476,9 @@ MonoBehaviour:
   velocity: {x: 10, y: 0}
   ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
     type: 3}
-  offset: {x: 0.1, y: 0.6}
+  offset: {x: 1.1, y: 0.8}
   fireRate: 0.2
+  shotEffect: {fileID: 1682124166123736, guid: 844796abb46e53b4484cb9b765192e80, type: 3}
 --- !u!1001 &4831108617680205695
 PrefabInstance:
   m_ObjectHideFlags: 0

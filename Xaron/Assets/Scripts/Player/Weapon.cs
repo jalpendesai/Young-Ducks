@@ -12,6 +12,8 @@ public class Weapon : MonoBehaviour
 
     private float timeBtwShots;
     public float fireRate;
+
+    public GameObject shotEffect;
     private int ammoCapacity = 6;
     private int ammoCount = 0;
     private bool canFire = true;
@@ -39,13 +41,15 @@ public class Weapon : MonoBehaviour
         {
             if (canFire && Input.GetButtonDown("Fire"))
             {
-                // Instantiate(shotEffect, shotPoint.position, Quaternion.identity);
+                GameObject effect = (GameObject)Instantiate(shotEffect, (Vector2)transform.position + offset * transform.localScale + new Vector2(transform.localScale.x * 1f, 0), Quaternion.identity);
+                // effect.transform.position = offset * transform.localScale.x;
+                Destroy(effect, 0.5f);
                 // camAnim.SetTrigger("shake");
                 if (fireShots == 1)
                 {
                     GameObject bullet = (GameObject)Instantiate(ammoPrefab, (Vector2)transform.position + offset, Quaternion.identity);
                     bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity.x * transform.localScale.x, velocity.y);
-                    
+
                     AudioManager.PlayPlayerFiringAudio();
 
                     Destroy(bullet, 1.0f);
