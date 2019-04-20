@@ -15,14 +15,22 @@ public class amoProjectile : MonoBehaviour
     private void Update()
     {
         // RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
-        // if (hitInfo.collider != null) {
-        //     if (hitInfo.collider.CompareTag("Enemy")) {
-        //         hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
+        // if (hitInfo.collider != null)
+        // {
+        //     if (hitInfo.collider.CompareTag("Enemy"))
+        //     {
+        //         hitInfo.collider.GetComponent<EnemyController>().TakeDamage(damage);
         //     }
         //     DestroyProjectile();
         // }
 
     }
+
+    // private void DestroyProjectile()
+    // {
+    //     Instantiate(destroyEffect, transform.position, Quaternion.identity);
+    //     Destroy(gameObject);
+    // }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -31,7 +39,7 @@ public class amoProjectile : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
-            AudioManager.PlayEnemyHitAudio();            
+            AudioManager.PlayEnemyHitAudio();
         }
 
 

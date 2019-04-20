@@ -4,6 +4,10 @@ public class AudioManager : MonoBehaviour
 {
     static AudioManager current;
 
+    [Header("Bg Music")]
+    public AudioClip bgMusic;
+    public AudioClip sceneReload;
+
     [Header("Player")]
     public AudioClip[] walking;
     public AudioClip[] crouching;
@@ -19,9 +23,11 @@ public class AudioManager : MonoBehaviour
 
     [Header("Mixer Groups")]
     public AudioMixerGroup playerGroup;
+    public AudioMixerGroup musicGroup;
     public AudioMixerGroup voiceGroup;
 
     AudioSource playerSource;
+    AudioSource musicSource;
     AudioSource voiceSource;
 
     private void Awake()
@@ -39,18 +45,44 @@ public class AudioManager : MonoBehaviour
 
         //  Generating Audio Source "Channels" Game's Audio
         playerSource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        musicSource = gameObject.AddComponent<AudioSource>() as AudioSource;
         voiceSource = gameObject.AddComponent<AudioSource>() as AudioSource;
 
         //  Assign AudioSource to its AudioMixer
         playerSource.outputAudioMixerGroup = playerGroup;
+        musicSource.outputAudioMixerGroup = musicGroup;
         voiceSource.outputAudioMixerGroup = voiceGroup;
+
+        //  Start Bg Music
+        PlayBgMusic();
+    }
+
+    public static void PlayBgMusic()
+    {
+        current.musicSource.clip = current.bgMusic;
+        current.musicSource.loop = true;
+        current.musicSource.Play();
+
+        // Play Reload Level Audio
+        PlaySceneRestartAudio();
+    }
+    public static void PlaySceneRestartAudio()
+    {
+        //If there is no current AudioManager, exit
+        if (current == null)
+            return;
+
+        //Set the level reload sting clip and tell the source to play
+        current.voiceSource.clip = current.sceneReload;
+        current.voiceSource.Play();
     }
 
     public static void PlayWalkingAudio()
     {
         //   If there are no current AudioManager
         //   OR playerSource is already playing then exit
-        if(current == null || current.playerSource.isPlaying){
+        if (current == null || current.playerSource.isPlaying)
+        {
             return;
         }
 
@@ -59,8 +91,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayJumpingAudio(){
-        if(current == null){
+    public static void PlayJumpingAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -68,8 +102,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayCrouchingAudio(){
-        if(current == null && current.playerSource.isPlaying){
+    public static void PlayCrouchingAudio()
+    {
+        if (current == null && current.playerSource.isPlaying)
+        {
             return;
         }
 
@@ -78,8 +114,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayPlayerHitAudio(){
-        if(current == null){
+    public static void PlayPlayerHitAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -87,8 +125,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayPlayerDeathAudio(){
-        if(current == null){
+    public static void PlayPlayerDeathAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -96,8 +136,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayPlayerFiringAudio(){
-        if(current == null){
+    public static void PlayPlayerFiringAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -105,8 +147,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayPlayerFireReloadingAudio(){
-        if(current == null){
+    public static void PlayPlayerFireReloadingAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -116,8 +160,10 @@ public class AudioManager : MonoBehaviour
 
 
     //  Enemy
-    public static void PlayEnemyHitAudio(){
-        if(current == null){
+    public static void PlayEnemyHitAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 
@@ -125,8 +171,10 @@ public class AudioManager : MonoBehaviour
         current.playerSource.Play();
     }
 
-    public static void PlayEnemyDeathAudio(){
-        if(current == null){
+    public static void PlayEnemyDeathAudio()
+    {
+        if (current == null)
+        {
             return;
         }
 

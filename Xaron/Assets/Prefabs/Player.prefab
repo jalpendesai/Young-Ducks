@@ -476,7 +476,7 @@ MonoBehaviour:
   velocity: {x: 10, y: 0}
   ammoPrefab: {fileID: 355687622662628073, guid: 1f9cfe58906668945a3f2b0462ef834b,
     type: 3}
-  offset: {x: 1.1, y: 0.8}
+  offset: {x: 0.3, y: 0.8}
   fireRate: 0.2
   shotEffect: {fileID: 1682124166123736, guid: 844796abb46e53b4484cb9b765192e80, type: 3}
 --- !u!1001 &4831108617680205695
