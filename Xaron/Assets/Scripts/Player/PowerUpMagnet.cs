@@ -13,7 +13,7 @@ public class PowerUpMagnet : MonoBehaviour
 {
     public ModifierList modifier;
     public float speedMultiplier = 1.0f;
-    public int fireShots = 1;
+    public float fireShots = 1;
     public float regFireMultiplier = 1.0f;
     public float damageMultiplier = 1.0f;
     public float timePeriod = 1.0f;

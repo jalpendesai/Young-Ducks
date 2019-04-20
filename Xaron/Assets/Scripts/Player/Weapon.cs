@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour
     private int ammoCount = 0;
     private bool canFire = true;
     private float reloadingTime = 1.0f;
-    private float fireShots = 2;
+    private float fireShots = 1;
 
     private void Update()
     {
